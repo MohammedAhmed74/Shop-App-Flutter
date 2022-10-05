@@ -47,3 +47,11 @@ class SuccessSearchState extends ShopStates {}
 class FailedSearchState extends ShopStates {}
 
 class EmptySearchState extends ShopStates {}
+
+class AddingProductToCartState extends ShopStates {}
+
+class RemovingProductFromCartState extends ShopStates {}
+
+class IncreasingProductInCartState extends ShopStates {}
+
+class DecreasingProductInCartState extends ShopStates {}

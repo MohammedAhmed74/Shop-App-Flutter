@@ -6,6 +6,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopapp/models/shop/home_model.dart';
+import 'package:shopapp/modules/Cart/cartScreen.dart';
 import 'package:shopapp/shared/cubit/cubit.dart';
 import 'package:shopapp/shared/cubit/states.dart';
 import 'package:shopapp/shared/network/cacheHelper.dart';
@@ -47,26 +48,44 @@ class ProductInfo extends StatelessWidget {
       physics: BouncingScrollPhysics(),
       child: Column(
         children: [
-          CarouselSlider(
-            items: productData.images
-                .map((e) => Container(
-                    height: 250,
-                    color: Colors.white,
-                    width: double.infinity,
-                    child: Image(image: NetworkImage(e))))
-                .toList(),
-            options: CarouselOptions(
-              height: 250.0,
-              viewportFraction: 0.6,
-              initialPage: 0,
-              enableInfiniteScroll: true,
-              reverse: false,
-              autoPlay: true,
-              autoPlayAnimationDuration: Duration(seconds: 1),
-              autoPlayCurve: Curves.fastOutSlowIn,
-              autoPlayInterval: Duration(seconds: 3),
-              scrollDirection: Axis.horizontal,
-            ),
+          Stack(
+            children: [
+              CarouselSlider(
+                items: productData.images
+                    .map((e) => Container(
+                        height: 250,
+                        color: Colors.white,
+                        width: double.infinity,
+                        child: Image(image: NetworkImage(e))))
+                    .toList(),
+                options: CarouselOptions(
+                  height: 250.0,
+                  viewportFraction: 0.6,
+                  initialPage: 0,
+                  enableInfiniteScroll: true,
+                  reverse: false,
+                  autoPlay: true,
+                  autoPlayAnimationDuration: Duration(seconds: 1),
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  autoPlayInterval: Duration(seconds: 3),
+                  scrollDirection: Axis.horizontal,
+                ),
+              ),
+              IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.black.withOpacity(0.6),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 6),
+                        child: Icon(
+                          Icons.arrow_back_ios,
+                          color: Colors.white,
+                        ),
+                      )))
+            ],
           ),
           SizedBox(
             height: 15,
@@ -145,7 +164,9 @@ class ProductInfo extends StatelessWidget {
                               topLeft: Radius.circular(30),
                             )),
                         child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              ShopCubit.get(context).addToCarts(productData);
+                            },
                             child: Text(
                               'Add to Cart',
                               style: TextStyle(color: Colors.white),
@@ -160,7 +181,14 @@ class ProductInfo extends StatelessWidget {
                               topRight: Radius.circular(30),
                             )),
                         child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              ShopCubit.get(context).addToCarts(productData);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CartScreen(),
+                                  ));
+                            },
                             child: Text(
                               'Buy Now',
                               style: TextStyle(color: Colors.white),

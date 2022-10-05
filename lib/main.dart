@@ -24,9 +24,9 @@ void main() async {
       startScreen = LoginScreen();
   } else
     startScreen = onBoarding_screen();
-
-  print('main lightMode');
-  print(cacheHelper.getValue(key: 'lightMode'));
+    
+  if (cacheHelper.getValue(key: 'lightMode') == null)
+    cacheHelper.setValue(key: 'lightMode', value: true);
   runApp(MyApp(startScreen));
 }
 

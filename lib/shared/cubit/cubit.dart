@@ -10,6 +10,7 @@ import 'package:shopapp/models/shop/profile_model.dart';
 import 'package:shopapp/models/shop/search_model.dart';
 import 'package:shopapp/modules/Categories/categoriesScreen.dart';
 import 'package:shopapp/modules/Favorites/favouriesScreen.dart';
+import 'package:shopapp/modules/Product%20Info/ProductInfoScreen.dart';
 import 'package:shopapp/modules/Products/productsScreen.dart';
 import 'package:shopapp/modules/Settings/settingsScreen.dart';
 import 'package:shopapp/shared/cubit/states.dart';
@@ -313,5 +314,46 @@ class ShopCubit extends Cubit<ShopStates> {
 
   isReady() {
     emit(SuccessHomeDataState());
+  }
+
+  List<ProductData> cartsProducts = [];
+  List<int> cartsProductsNumber = [];
+
+  void addToCarts(ProductData product) {
+    cartsProducts.add(product);
+    cartsProductsNumber.add(1);
+    emit(AddingProductToCartState());
+  }
+
+  void removeFromCarts(ProductData product) {
+    for (int i = 0; i < cartsProducts.length; i++) {
+      if (product.id == cartsProducts[i].id) {
+        cartsProductsNumber.removeAt(i);
+      }
+    }
+    cartsProducts.remove(product);
+    emit(RemovingProductFromCartState());
+  }
+
+  void increaseProductInCarts(ProductData product) {
+    for (int i = 0; i < cartsProducts.length; i++) {
+      if (product.id == cartsProducts[i].id) {
+        cartsProductsNumber[i]++;
+      }
+    }
+    emit(IncreasingProductInCartState());
+  }
+
+  void decreaseProductInCarts(ProductData product) {
+    for (int i = 0; i < cartsProducts.length; i++) {
+      if (product.id == cartsProducts[i].id) {
+        if (cartsProductsNumber[i] > 1) {
+          cartsProductsNumber[i]--;
+        } else {
+          removeFromCarts(product);
+        }
+      }
+    }
+    emit(DecreasingProductInCartState());
   }
 }
